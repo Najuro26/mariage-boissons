@@ -10,6 +10,10 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
 
+# ============================================================
+# TABLE DES COMMANDES
+# ============================================================
+
 class Commande(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     numero_commande = db.Column(db.String(50), nullable=True)
@@ -17,12 +21,24 @@ class Commande(db.Model):
     boisson = db.Column(db.String(50))
     quantite = db.Column(db.Integer)
     statut = db.Column(db.String(20), default="Nouvelle")
+
+
+# ============================================================
+# TABLE DU CATALOGUE
+# ============================================================
+
 class Produit(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nom = db.Column(db.String(100), nullable=False, unique=True)
     categorie = db.Column(db.String(50), nullable=False, default="Boisson")
     photo = db.Column(db.String(200), nullable=True)
     disponible = db.Column(db.Boolean, default=True)
+
+
+# ============================================================
+# ANCIEN CATALOGUE
+# Conservé temporairement pour ne pas casser l'application
+# ============================================================
 
 BOISSONS = [
     "Guinness",
@@ -36,6 +52,46 @@ BOISSONS = [
 ]
 
 
+# ============================================================
+# INITIALISATION DU CATALOGUE
+# ============================================================
+
+def initialiser_catalogue():
+
+    produits = [
+        "Guinness",
+        "Kadji",
+        "Isenbeck",
+        "Heineken",
+        "Castel",
+        "33 Export",
+        "Top Grenadine",
+        "Top Ananas"
+    ]
+
+    for nom in produits:
+
+        produit_existant = Produit.query.filter_by(
+            nom=nom
+        ).first()
+
+        if not produit_existant:
+
+            produit = Produit(
+                nom=nom,
+                categorie="Boisson",
+                disponible=True
+            )
+
+            db.session.add(produit)
+
+    db.session.commit()
+
+
+# ============================================================
+# PAGE DES INVITÉS
+# ============================================================
+
 @app.route("/", methods=["GET", "POST"])
 def accueil():
 
@@ -43,7 +99,7 @@ def accueil():
 
         table = request.form["table"]
 
-        # Création d'un numéro unique pour cette commande
+        # Création d'un numéro unique pour la commande
         numero_commande = str(uuid.uuid4())[:8].upper()
 
         commande_creee = False
@@ -51,7 +107,10 @@ def accueil():
         for boisson in BOISSONS:
 
             quantite = int(
-                request.form.get(f"quantite_{boisson}", 0)
+                request.form.get(
+                    f"quantite_{boisson}",
+                    0
+                )
             )
 
             if quantite > 0:
@@ -65,6 +124,7 @@ def accueil():
                 )
 
                 db.session.add(commande)
+
                 commande_creee = True
 
         if commande_creee:
@@ -85,6 +145,10 @@ def accueil():
     )
 
 
+# ============================================================
+# PAGE DU BAR
+# ============================================================
+
 @app.route("/bar")
 def bar():
 
@@ -92,12 +156,10 @@ def bar():
         Commande.id.desc()
     ).all()
 
-    # Regroupement des boissons par numéro de commande
     commandes_groupees = {}
 
     for commande in commandes:
 
-        # Anciennes commandes sans numéro
         if commande.numero_commande:
             cle = commande.numero_commande
         else:
@@ -122,6 +184,11 @@ def bar():
         commandes=commandes_groupees.values()
     )
 
+
+# ============================================================
+# PAGE DES HÔTESSES
+# ============================================================
+
 @app.route("/hotesses")
 def hotesses():
 
@@ -129,12 +196,10 @@ def hotesses():
         Commande.id.desc()
     ).all()
 
-    # Regroupement des commandes par numéro
     commandes_groupees = {}
 
     for commande in commandes:
 
-        # Les anciennes commandes sans numéro
         if commande.numero_commande:
             cle = commande.numero_commande
         else:
@@ -165,6 +230,12 @@ def hotesses():
         "hotesses.html",
         commandes=commandes_pretes
     )
+
+
+# ============================================================
+# CHANGEMENT DU STATUT D'UNE COMMANDE
+# ============================================================
+
 @app.route(
     "/commande/<numero_commande>/statut/<nouveau_statut>",
     methods=["GET", "POST"]
@@ -177,7 +248,6 @@ def changer_statut(numero_commande, nouveau_statut):
         "Livrée"
     ]
 
-    # Vérification du statut
     if nouveau_statut not in statuts_autorises:
 
         if request.method == "POST":
@@ -188,12 +258,10 @@ def changer_statut(numero_commande, nouveau_statut):
 
         return redirect(url_for("bar"))
 
-    # Recherche de la commande
     commandes = Commande.query.filter_by(
         numero_commande=numero_commande
     ).all()
 
-    # Commande inexistante
     if not commandes:
 
         if request.method == "POST":
@@ -204,13 +272,11 @@ def changer_statut(numero_commande, nouveau_statut):
 
         return redirect(url_for("bar"))
 
-    # Modification du statut
     for commande in commandes:
         commande.statut = nouveau_statut
 
     db.session.commit()
 
-    # Réponse pour JavaScript
     if request.method == "POST":
 
         return {
@@ -219,12 +285,12 @@ def changer_statut(numero_commande, nouveau_statut):
             "statut": nouveau_statut
         }
 
-    # Ancien fonctionnement conservé
     return redirect(url_for("bar"))
 
- 
 
-   
+# ============================================================
+# API DES COMMANDES
+# ============================================================
 
 @app.route("/api/commandes")
 def api_commandes():
@@ -259,33 +325,15 @@ def api_commandes():
     return {
         "commandes": list(commandes_groupees.values())
     }
-def initialiser_catalogue():
-    produits = [
-        "Guinness",
-        "Kadji",
-        "Isenbeck",
-        "Heineken",
-        "Castel",
-        "33 Export",
-        "Top Grenadine",
-        "Top Ananas"
-    ]
 
-    for nom in produits:
-        produit_existant = Produit.query.filter_by(nom=nom).first()
 
-        if not produit_existant:
-            produit = Produit(
-                nom=nom,
-                categorie="Boisson",
-                disponible=True
-            )
+# ============================================================
+# ADMINISTRATION DU CATALOGUE
+# ============================================================
 
-            db.session.add(produit)
-
-    db.session.commit()
 @app.route("/admin")
 def admin():
+
     produits = Produit.query.order_by(
         Produit.categorie,
         Produit.nom
@@ -297,16 +345,27 @@ def admin():
     )
 
 
-@app.route("/admin/produit/ajouter", methods=["POST"])
+# ============================================================
+# AJOUTER UN PRODUIT
+# ============================================================
+
+@app.route(
+    "/admin/produit/ajouter",
+    methods=["POST"]
+)
 def ajouter_produit():
 
     nom = request.form["nom"].strip()
     categorie = request.form["categorie"]
 
     if nom:
-        produit_existant = Produit.query.filter_by(nom=nom).first()
+
+        produit_existant = Produit.query.filter_by(
+            nom=nom
+        ).first()
 
         if not produit_existant:
+
             produit = Produit(
                 nom=nom,
                 categorie=categorie,
@@ -319,30 +378,40 @@ def ajouter_produit():
     return redirect(url_for("admin"))
 
 
-@app.route("/admin/produit/<int:produit_id>/supprimer", methods=["POST"])
+# ============================================================
+# SUPPRIMER UN PRODUIT
+# ============================================================
+
+@app.route(
+    "/admin/produit/<int:produit_id>/supprimer",
+    methods=["POST"]
+)
 def supprimer_produit(produit_id):
 
-    produit = Produit.query.get_or_404(produit_id)
+    produit = Produit.query.get_or_404(
+        produit_id
+    )
 
     db.session.delete(produit)
     db.session.commit()
 
     return redirect(url_for("admin"))
-@app.route("/admin")
-def admin():
-    produits = Produit.query.order_by(
-        Produit.categorie,
-        Produit.nom
-    ).all()
 
-    return render_template(
-        "admin.html",
-        produits=produits
-    )
+
+# ============================================================
+# LANCEMENT DE L'APPLICATION
+# ============================================================
+
 if __name__ == "__main__":
 
     with app.app_context():
+
         db.create_all()
+
         initialiser_catalogue()
 
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=True
+    )
