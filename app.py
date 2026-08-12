@@ -328,6 +328,17 @@ def supprimer_produit(produit_id):
     db.session.commit()
 
     return redirect(url_for("admin"))
+@app.route("/admin")
+def admin():
+    produits = Produit.query.order_by(
+        Produit.categorie,
+        Produit.nom
+    ).all()
+
+    return render_template(
+        "admin.html",
+        produits=produits
+    )
 if __name__ == "__main__":
 
     with app.app_context():
