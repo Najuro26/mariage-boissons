@@ -17,7 +17,12 @@ class Commande(db.Model):
     boisson = db.Column(db.String(50))
     quantite = db.Column(db.Integer)
     statut = db.Column(db.String(20), default="Nouvelle")
-
+class Produit(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nom = db.Column(db.String(100), nullable=False, unique=True)
+    categorie = db.Column(db.String(50), nullable=False, default="Boisson")
+    photo = db.Column(db.String(200), nullable=True)
+    disponible = db.Column(db.Boolean, default=True)
 
 BOISSONS = [
     "Guinness",
