@@ -259,9 +259,79 @@ def api_commandes():
     return {
         "commandes": list(commandes_groupees.values())
     }
+def initialiser_catalogue():
+    produits = [
+        "Guinness",
+        "Kadji",
+        "Isenbeck",
+        "Heineken",
+        "Castel",
+        "33 Export",
+        "Top Grenadine",
+        "Top Ananas"
+    ]
+
+    for nom in produits:
+        produit_existant = Produit.query.filter_by(nom=nom).first()
+
+        if not produit_existant:
+            produit = Produit(
+                nom=nom,
+                categorie="Boisson",
+                disponible=True
+            )
+
+            db.session.add(produit)
+
+    db.session.commit()
+@app.route("/admin")
+def admin():
+    produits = Produit.query.order_by(
+        Produit.categorie,
+        Produit.nom
+    ).all()
+
+    return render_template(
+        "admin.html",
+        produits=produits
+    )
+
+
+@app.route("/admin/produit/ajouter", methods=["POST"])
+def ajouter_produit():
+
+    nom = request.form["nom"].strip()
+    categorie = request.form["categorie"]
+
+    if nom:
+        produit_existant = Produit.query.filter_by(nom=nom).first()
+
+        if not produit_existant:
+            produit = Produit(
+                nom=nom,
+                categorie=categorie,
+                disponible=True
+            )
+
+            db.session.add(produit)
+            db.session.commit()
+
+    return redirect(url_for("admin"))
+
+
+@app.route("/admin/produit/<int:produit_id>/supprimer", methods=["POST"])
+def supprimer_produit(produit_id):
+
+    produit = Produit.query.get_or_404(produit_id)
+
+    db.session.delete(produit)
+    db.session.commit()
+
+    return redirect(url_for("admin"))
 if __name__ == "__main__":
 
     with app.app_context():
         db.create_all()
+        initialiser_catalogue()
 
     app.run(host="0.0.0.0", port=5000, debug=True)
