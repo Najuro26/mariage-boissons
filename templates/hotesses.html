@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Espace Hôtesses</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #f4f6f8, #e9ecef);
+        color: #212529;
+    }
+
+    /* =========================
+       EN-TÊTE
+    ========================= */
+
+    .header {
+        background: linear-gradient(135deg, #212529, #343a40);
+        color: white;
+        padding: 25px 20px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.20);
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 30px;
+    }
+
+    .header p {
+        margin: 8px 0 0;
+        opacity: 0.8;
+        font-size: 14px;
+    }
+
+    /* =========================
+       CONTENEUR
+    ========================= */
+
+    .container {
+        max-width: 900px;
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+
+    /* =========================
+       COMPTEUR
+    ========================= */
+
+    .compteur {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 14px;
+        margin-bottom: 20px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        font-weight: bold;
+        text-align: center;
+        font-size: 17px;
+    }
+
+    /* =========================
+       GRILLE
+    ========================= */
+
+    .commandes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+    }
+
+    /* =========================
+       CARTE
+    ========================= */
+
+    .commande {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 2px solid #ffc107;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
+    }
+
+    .commande-header {
+        background: #fff3cd;
+        padding: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .numero {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .table-numero {
+        background: #212529;
+        color: white;
+        padding: 8px 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    /* =========================
+       CORPS
+    ========================= */
+
+    .commande-body {
+        padding: 18px;
+    }
+
+    .titre-boissons {
+        margin: 0 0 12px;
+        font-size: 15px;
+        color: #6c757d;
+        text-transform: uppercase;
+    }
+
+    .boisson {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 13px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 16px;
+    }
+
+    .boisson:last-child {
+        border-bottom: none;
+    }
+
+    .quantite {
+        background: #212529;
+        color: white;
+        min-width: 45px;
+        text-align: center;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    /* =========================
+       STATUT
+    ========================= */
+
+    .statut {
+        background: #fff3cd;
+        color: #664d03;
+        text-align: center;
+        padding: 12px;
+        margin-top: 18px;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+
+    /* =========================
+       BOUTON
+    ========================= */
+
+    .actions {
+        margin-top: 15px;
+    }
+
+    .btn-livrer {
+        width: 100%;
+        min-height: 55px;
+        border: none;
+        border-radius: 12px;
+        background: #198754;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn-livrer:hover {
+        transform: scale(1.02);
+        opacity: 0.9;
+    }
+
+    .btn-livrer:disabled {
+        opacity: 0.6;
+        cursor: wait;
+    }
+
+    /* =========================
+       AUCUNE COMMANDE
+    ========================= */
+
+    .vide {
+        background: white;
+        border-radius: 18px;
+        text-align: center;
+        padding: 60px 20px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .vide .icone {
+        font-size: 55px;
+        margin-bottom: 15px;
+    }
+
+    .vide h2 {
+        margin: 0 0 8px;
+    }
+
+    .vide p {
+        color: #777;
+        margin: 0;
+    }
+
+    /* =========================
+       RETOUR
+    ========================= */
+
+    .retour {
+        text-align: center;
+        margin: 30px 0;
+    }
+
+    .retour a {
+        display: inline-block;
+        text-decoration: none;
+        background: #212529;
+        color: white;
+        padding: 13px 20px;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+        body {
+            padding: 0;
+        }
+
+        .header {
+            padding: 20px 15px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .container {
+            margin: 20px auto;
+            padding: 0 12px;
+        }
+
+        .commandes {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .commande-header {
+            padding: 15px;
+        }
+
+        .commande-body {
+            padding: 15px;
+        }
+
+        .numero {
+            font-size: 15px;
+        }
+
+        .table-numero {
+            font-size: 13px;
+        }
+
+        .btn-livrer {
+            min-height: 60px;
+            font-size: 16px;
+        }
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<header class="header">
+
+
+<h1>💍 Espace Hôtesses</h1>
+
+<p>
+    Commandes prêtes à être livrées
+</p>
+
+
+</header>
+
+<main class="container">
+
+
+<div class="compteur">
+
+    🟡
+    {{ commandes|length }}
+    commande(s) prête(s) à livrer
+
+</div>
+
+
+{% if commandes %}
+
+<div class="commandes">
+
+    {% for commande in commandes %}
+
+    <div
+        class="commande"
+        data-numero="{{ commande.numero }}"
+    >
+
+        <!-- EN-TÊTE -->
+
+        <div class="commande-header">
+
+            <div class="numero">
+
+                📋 Commande
+                {{ commande.numero or "Ancienne" }}
+
+            </div>
+
+            <div class="table-numero">
+
+                🪑 Table {{ commande.table }}
+
+            </div>
+
+        </div>
+
+
+        <!-- CORPS -->
+
+        <div class="commande-body">
+
+            <h3 class="titre-boissons">
+
+                🍺 Boissons à livrer
+
+            </h3>
+
+
+            {% for boisson in commande.boissons %}
+
+            <div class="boisson">
+
+                <span>
+
+                    🍺 {{ boisson.nom }}
+
+                </span>
+
+                <span class="quantite">
+
+                    × {{ boisson.quantite }}
+
+                </span>
+
+            </div>
+
+            {% endfor %}
+
+
+            <!-- STATUT -->
+
+            <div class="statut">
+
+                🟡 Commande prête à livrer
+
+            </div>
+
+
+            <!-- ACTION -->
+
+            {% if commande.numero %}
+
+            <div class="actions">
+
+                <button
+                    class="btn-livrer"
+                    onclick="livrerCommande(
+                        '{{ commande.numero }}',
+                        this
+                    )"
+                >
+
+                    🟢 LIVRER À LA TABLE
+
+                </button>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+
+{% else %}
+
+<div class="vide">
+
+    <div class="icone">
+        🍺
+    </div>
+
+    <h2>
+        Aucune commande prête
+    </h2>
+
+    <p>
+        Les commandes préparées par le bar
+        apparaîtront automatiquement ici.
+    </p>
+
+</div>
+
+{% endif %}
+
+
+<div class="retour">
+
+    <a href="/">
+        ← Retour aux commandes
+    </a>
+
+</div>
+
+
+</main>
+
+<script>
+
+    /*
+     * ================================
+     * LIVRER UNE COMMANDE
+     * ================================
+     */
+
+    function livrerCommande(numeroCommande, bouton) {
+
+        bouton.disabled = true;
+
+        const texteOriginal = bouton.innerHTML;
+
+        bouton.innerHTML = "⏳ Livraison...";
+
+
+        fetch(
+            `/commande/${encodeURIComponent(numeroCommande)}/statut/Livrée`,
+            {
+                method: "POST"
+            }
+        )
+
+        .then(response => {
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Erreur serveur"
+                );
+
+            }
+
+            return response.json();
+
+        })
+
+        .then(data => {
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Impossible de livrer la commande"
+                );
+
+            }
+
+
+            console.log(
+                "✅ Commande livrée :",
+                data.numero
+            );
+
+
+            /*
+             * Trouver la carte
+             */
+
+            const carte =
+                document.querySelector(
+                    `.commande[data-numero="${CSS.escape(numeroCommande)}"]`
+                );
+
+
+            if (carte) {
+
+                /*
+                 * Animation de disparition
+                 */
+
+                carte.style.transition =
+                    "opacity 0.4s ease, transform 0.4s ease";
+
+                carte.style.opacity = "0";
+
+                carte.style.transform =
+                    "translateX(30px)";
+
+
+                setTimeout(() => {
+
+                    carte.remove();
+
+                    mettreAJourCompteur();
+
+                    verifierAucuneCommande();
+
+                }, 400);
+
+            }
+
+        })
+
+        .catch(error => {
+
+            console.error(
+                "❌ Erreur livraison :",
+                error
+            );
+
+            bouton.disabled = false;
+
+            bouton.innerHTML =
+                texteOriginal;
+
+            alert(
+                "❌ Impossible de livrer cette commande."
+            );
+
+        });
+
+    }
+
+
+    /*
+     * ================================
+     * COMPTEUR
+     * ================================
+     */
+
+    function mettreAJourCompteur() {
+
+        const cartes =
+            document.querySelectorAll(
+                ".commande"
+            );
+
+        const compteur =
+            document.querySelector(
+                ".compteur"
+            );
+
+        compteur.innerHTML =
+            `🟡 ${cartes.length} commande(s) prête(s) à livrer`;
+
+    }
+
+
+    /*
+     * ================================
+     * SI PLUS AUCUNE COMMANDE
+     * ================================
+     */
+
+    function verifierAucuneCommande() {
+
+        const cartes =
+            document.querySelectorAll(
+                ".commande"
+            );
+
+        if (cartes.length > 0) {
+            return;
+        }
+
+
+        const commandes =
+            document.querySelector(
+                ".commandes"
+            );
+
+        if (commandes) {
+            commandes.remove();
+        }
+
+
+        const vide =
+            document.createElement("div");
+
+        vide.className = "vide";
+
+        vide.innerHTML = `
+            <div class="icone">🍺</div>
+            <h2>Aucune commande prête</h2>
+            <p>
+                Les commandes préparées par le bar
+                apparaîtront automatiquement ici.
+            </p>
+        `;
+
+
+        document
+            .querySelector(".container")
+            .insertBefore(
+                vide,
+                document.querySelector(".retour")
+            );
+
+    }
+
+
+    /*
+     * ================================
+     * SURVEILLANCE DES COMMANDES
+     * ================================
+     */
+
+    let commandesPrecedentes = null;
+
+
+    function verifierNouvellesCommandes() {
+
+        fetch("/api/commandes")
+
+            .then(response =>
+                response.json()
+            )
+
+            .then(data => {
+
+                const commandes =
+                    data.commandes || [];
+
+
+                /*
+                 * On garde uniquement
+                 * les commandes préparées.
+                 */
+
+                const commandesPreparees =
+                    commandes.filter(
+                        commande =>
+                            commande.statut === "Préparée"
+                    );
+
+
+                const numerosActuels =
+                    commandesPreparees
+                        .map(
+                            commande =>
+                                commande.numero
+                        )
+                        .filter(
+                            numero => numero
+                        );
+
+
+                /*
+                 * Première vérification
+                 */
+
+                if (
+                    commandesPrecedentes === null
+                ) {
+
+                    commandesPrecedentes =
+                        numerosActuels;
+
+                    return;
+
+                }
+
+
+                /*
+                 * Recherche d'une nouvelle
+                 * commande préparée.
+                 */
+
+                const nouvelle =
+                    numerosActuels.some(
+                        numero =>
+                            !commandesPrecedentes.includes(
+                                numero
+                            )
+                    );
+
+
+                if (nouvelle) {
+
+                    console.log(
+                        "🟡 Nouvelle commande prête !"
+                    );
+
+
+                    /*
+                     * Recharger la page
+                     * pour afficher la commande.
+                     */
+
+                    location.reload();
+
+                }
+
+
+                commandesPrecedentes =
+                    numerosActuels;
+
+            })
+
+            .catch(error => {
+
+                console.error(
+                    "❌ Erreur surveillance :",
+                    error
+                );
+
+            });
+
+    }
+
+
+    /*
+     * Vérification toutes les 3 secondes
+     */
+
+    setInterval(
+        verifierNouvellesCommandes,
+        3000
+    );
+
+
+    /*
+     * Première vérification
+     */
+
+    verifierNouvellesCommandes();
+
+</script>
+
+</body>
+
+</html>

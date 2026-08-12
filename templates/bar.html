@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Bar - Tableau de bord</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #f4f6f8, #e9ecef);
+        color: #212529;
+    }
+
+    /* =========================
+       BOUTONS
+    ========================= */
+
+    .actions button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 48px;
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .actions button:hover {
+        transform: scale(1.02);
+        opacity: 0.9;
+    }
+
+    .actions button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+    }
+
+    /* =========================
+       EN-TÊTE
+    ========================= */
+
+    .header {
+        background: linear-gradient(135deg, #212529, #343a40);
+        color: white;
+        padding: 25px 20px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.20);
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 30px;
+    }
+
+    .header p {
+        margin: 8px 0 0;
+        opacity: 0.8;
+        font-size: 14px;
+    }
+
+    /* =========================
+       CONTENEUR
+    ========================= */
+
+    .container {
+        max-width: 1200px;
+        margin: 30px auto;
+        padding: 0 15px;
+    }
+
+    /* =========================
+       BARRE D'INFORMATIONS
+    ========================= */
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+        flex-wrap: wrap;
+    }
+
+    .compteur {
+        background: white;
+        padding: 12px 18px;
+        border-radius: 12px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        font-weight: bold;
+    }
+
+    .indicateur {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #555;
+    }
+
+    .point-vert {
+        width: 10px;
+        height: 10px;
+        background: #198754;
+        border-radius: 50%;
+        animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+
+        0% {
+            box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.5);
+        }
+
+        70% {
+            box-shadow: 0 0 0 8px rgba(25, 135, 84, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+        }
+
+    }
+
+    /* =========================
+       GRILLE DES COMMANDES
+    ========================= */
+
+    .commandes {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 20px;
+    }
+
+    /* =========================
+       CARTE COMMANDE
+    ========================= */
+
+    .commande {
+        background: white;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.10);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        border: 2px solid transparent;
+    }
+
+    .commande:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Nouvelle commande */
+
+    .commande.nouvelle-card {
+        border-color: #dc3545;
+        animation: nouvelleCommande 2s infinite;
+    }
+
+    @keyframes nouvelleCommande {
+
+        0% {
+            box-shadow: 0 5px 18px rgba(220, 53, 69, 0.15);
+        }
+
+        50% {
+            box-shadow: 0 5px 28px rgba(220, 53, 69, 0.45);
+        }
+
+        100% {
+            box-shadow: 0 5px 18px rgba(220, 53, 69, 0.15);
+        }
+
+    }
+
+    /* =========================
+       EN-TÊTE CARTE
+    ========================= */
+
+    .commande-header {
+        padding: 18px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .numero {
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    .table-numero {
+        background: #212529;
+        color: white;
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    /* =========================
+       CORPS CARTE
+    ========================= */
+
+    .commande-body {
+        padding: 18px;
+    }
+
+    .titre-boissons {
+        margin: 0 0 12px;
+        font-size: 15px;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .boisson {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 13px 0;
+        border-bottom: 1px solid #eee;
+        font-size: 16px;
+    }
+
+    .boisson:last-child {
+        border-bottom: none;
+    }
+
+    .nom-boisson {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .quantite {
+        background: #212529;
+        color: white;
+        min-width: 42px;
+        text-align: center;
+        padding: 5px 8px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    /* =========================
+       STATUT
+    ========================= */
+
+    .statut {
+        display: block;
+        text-align: center;
+        padding: 11px;
+        margin-top: 18px;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .nouvelle {
+        background: #f8d7da;
+        color: #842029;
+    }
+
+    .preparee {
+        background: #fff3cd;
+        color: #664d03;
+    }
+
+    .livree {
+        background: #d1e7dd;
+        color: #0f5132;
+    }
+
+    /* =========================
+       ACTIONS
+    ========================= */
+
+    .actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .btn-preparer {
+        background: #f0ad00;
+    }
+
+    .btn-livrer {
+        background: #198754;
+    }
+
+    .btn-unique {
+        grid-column: 1 / -1;
+    }
+
+    /* =========================
+       AUCUNE COMMANDE
+    ========================= */
+
+    .vide {
+        background: white;
+        border-radius: 18px;
+        text-align: center;
+        padding: 60px 20px;
+        box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    .vide .icone {
+        font-size: 55px;
+        margin-bottom: 15px;
+    }
+
+    .vide h2 {
+        margin: 0 0 8px;
+    }
+
+    .vide p {
+        color: #777;
+        margin: 0;
+    }
+
+    /* =========================
+       RETOUR
+    ========================= */
+
+    .retour {
+        text-align: center;
+        margin: 30px 0;
+    }
+
+    .retour a {
+        display: inline-block;
+        text-decoration: none;
+        background: #212529;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-weight: bold;
+    }
+
+    .retour a:hover {
+        opacity: 0.9;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+        body {
+            padding: 0;
+        }
+
+        .header {
+            padding: 20px 15px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .container {
+            margin: 20px auto;
+            padding: 0 12px;
+        }
+
+        .commandes {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .commande-header {
+            padding: 15px;
+        }
+
+        .commande-body {
+            padding: 15px;
+        }
+
+        .numero {
+            font-size: 15px;
+        }
+
+        .table-numero {
+            font-size: 13px;
+            padding: 6px 10px;
+        }
+
+        .actions button {
+            min-height: 52px;
+            font-size: 14px;
+        }
+
+    }
+
+    /* =========================
+       BADGE NOUVELLE COMMANDE
+    ========================= */
+
+    .badge-nouveau {
+        display: inline-block;
+        margin-left: 6px;
+        padding: 4px 7px;
+        background: #dc3545;
+        color: white;
+        border-radius: 6px;
+        font-size: 11px;
+        animation: clignote 1s infinite;
+    }
+
+    @keyframes clignote {
+
+        50% {
+            opacity: 0.4;
+        }
+
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+
+<!-- =========================
+     EN-TÊTE
+========================= -->
+
+<header class="header">
+
+    <h1>🍺 Tableau de bord du Bar</h1>
+
+    <p>
+        Gestion des commandes en temps réel
+    </p>
+
+</header>
+
+
+<main class="container">
+
+    <!-- =========================
+         INFORMATIONS
+    ========================= -->
+
+    <div class="top-bar">
+
+        <div class="compteur">
+            📋 {{ commandes|length }} commande(s)
+        </div>
+
+        <div class="indicateur">
+            <span class="point-vert"></span>
+            Surveillance en temps réel
+        </div>
+
+    </div>
+
+
+    {% if commandes %}
+
+    <div class="commandes">
+
+        {% for commande in commandes %}
+
+        <!-- =========================
+             CARTE COMMANDE
+        ========================= -->
+
+        <div
+            class="commande {% if commande.statut == 'Nouvelle' %}nouvelle-card{% endif %}"
+            data-commande="{{ commande.numero }}"
+        >
+
+            <!-- EN-TÊTE -->
+
+            <div class="commande-header">
+
+                <div class="numero">
+
+                    📋 Commande
+                    {{ commande.numero or "Ancienne" }}
+
+                    {% if commande.statut == "Nouvelle" %}
+
+                    <span class="badge-nouveau">
+                        NOUVELLE
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+                <div class="table-numero">
+                    🪑 Table {{ commande.table }}
+                </div>
+
+            </div>
+
+
+            <!-- CORPS -->
+
+            <div class="commande-body">
+
+                <h3 class="titre-boissons">
+                    🍺 Boissons commandées
+                </h3>
+
+
+                {% for boisson in commande.boissons %}
+
+                <div class="boisson">
+
+                    <span class="nom-boisson">
+                        🍺 {{ boisson.nom }}
+                    </span>
+
+                    <span class="quantite">
+                        × {{ boisson.quantite }}
+                    </span>
+
+                </div>
+
+                {% endfor %}
+
+
+                <!-- STATUT -->
+
+                <div class="statut
+                    {% if commande.statut == 'Nouvelle' %}
+                        nouvelle
+                    {% elif commande.statut == 'Préparée' %}
+                        preparee
+                    {% elif commande.statut == 'Livrée' %}
+                        livree
+                    {% endif %}
+                ">
+
+                    {% if commande.statut == "Nouvelle" %}
+
+                        🔴 Nouvelle commande
+
+                    {% elif commande.statut == "Préparée" %}
+
+                        🟡 Commande préparée
+
+                    {% elif commande.statut == "Livrée" %}
+
+                        🟢 Commande livrée
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                {% if commande.numero %}
+
+                <div class="actions">
+
+                    {% if commande.statut == "Nouvelle" %}
+
+                    <button
+                        type="button"
+                        class="btn-preparer"
+                        onclick="changerStatut('{{ commande.numero }}', 'Préparée', this)"
+                    >
+                        🟡 Préparer
+                    </button>
+
+                    {% endif %}
+
+
+                    {% if commande.statut != "Livrée" %}
+
+                    <button
+                        type="button"
+                        class="btn-livrer {% if commande.statut != 'Nouvelle' %}btn-unique{% endif %}"
+                        onclick="changerStatut('{{ commande.numero }}', 'Livrée', this)"
+                    >
+                        🟢 Livrer
+                    </button>
+
+                    {% endif %}
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    {% else %}
+
+    <!-- =========================
+         AUCUNE COMMANDE
+    ========================= -->
+
+    <div class="vide">
+
+        <div class="icone">
+            🍺
+        </div>
+
+        <h2>
+            Aucune commande
+        </h2>
+
+        <p>
+            Les nouvelles commandes apparaîtront automatiquement ici.
+        </p>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- =========================
+         RETOUR
+    ========================= -->
+
+    <div class="retour">
+
+        <a href="/">
+            ← Retour aux commandes
+        </a>
+
+    </div>
+
+</main>
+
+
+<!-- =========================
+     SON DE NOTIFICATION
+========================= -->
+
+<audio id="sonCommande" preload="auto">
+
+    <source
+        src="{{ url_for('static', filename='sounds/nouvelle-commande.mp3') }}"
+        type="audio/mpeg">
+
+</audio>
+
+
+<script>
+
+    /* =====================================================
+       CHANGEMENT DE STATUT SANS RECHARGER LA PAGE
+    ===================================================== */
+
+    function changerStatut(
+        numeroCommande,
+        nouveauStatut,
+        bouton
+    ) {
+
+        /* Désactiver le bouton */
+
+        bouton.disabled = true;
+
+        const texteOriginal =
+            bouton.innerHTML;
+
+        bouton.innerHTML =
+            "⏳ Mise à jour...";
+
+
+        /* Envoi vers Flask */
+
+        fetch(
+            `/commande/${encodeURIComponent(numeroCommande)}/statut/${encodeURIComponent(nouveauStatut)}`,
+            {
+                method: "POST"
+            }
+        )
+
+        .then(response => {
+
+            if (!response.ok) {
+                throw new Error(
+                    "Erreur serveur"
+                );
+            }
+
+            return response.json();
+
+        })
+
+        .then(data => {
+
+            if (!data.success) {
+
+                throw new Error(
+                    data.message ||
+                    "Impossible de modifier le statut"
+                );
+
+            }
+
+
+            console.log(
+                "✅ Statut modifié :",
+                data.numero,
+                data.statut
+            );
+
+
+            /* =========================
+               TROUVER LA CARTE
+            ========================= */
+
+            const carte =
+                document.querySelector(
+                    `[data-commande="${CSS.escape(numeroCommande)}"]`
+                );
+
+
+            if (!carte) {
+                return;
+            }
+
+
+            const corps =
+                carte.querySelector(
+                    ".commande-body"
+                );
+
+
+            /* =========================
+               SUPPRIMER ANCIEN STATUT
+            ========================= */
+
+            const ancienStatut =
+                carte.querySelector(
+                    ".statut"
+                );
+
+            if (ancienStatut) {
+                ancienStatut.remove();
+            }
+
+
+            /* =========================
+               SUPPRIMER ANCIENS BOUTONS
+            ========================= */
+
+            const anciennesActions =
+                carte.querySelector(
+                    ".actions"
+                );
+
+            if (anciennesActions) {
+                anciennesActions.remove();
+            }
+
+
+            /* =========================
+               NOUVEAU STATUT
+            ========================= */
+
+            const nouveauBadge =
+                document.createElement(
+                    "div"
+                );
+
+            nouveauBadge.classList.add(
+                "statut"
+            );
+
+
+            if (nouveauStatut === "Préparée") {
+
+                nouveauBadge.classList.add(
+                    "preparee"
+                );
+
+                nouveauBadge.innerHTML =
+                    "🟡 Commande préparée";
+
+            }
+
+
+            if (nouveauStatut === "Livrée") {
+
+                nouveauBadge.classList.add(
+                    "livree"
+                );
+
+                nouveauBadge.innerHTML =
+                    "🟢 Commande livrée";
+
+            }
+
+
+            corps.appendChild(
+                nouveauBadge
+            );
+
+
+            /* =========================
+               SUPPRIMER BADGE NOUVELLE
+            ========================= */
+
+            const badgeNouveau =
+                carte.querySelector(
+                    ".badge-nouveau"
+                );
+
+            if (badgeNouveau) {
+                badgeNouveau.remove();
+            }
+
+
+            /* =========================
+               SUPPRIMER ANIMATION ROUGE
+            ========================= */
+
+            carte.classList.remove(
+                "nouvelle-card"
+            );
+
+
+            /* =========================
+               CRÉER BOUTON LIVRER
+            ========================= */
+
+            if (nouveauStatut === "Préparée") {
+
+                const nouvellesActions =
+                    document.createElement(
+                        "div"
+                    );
+
+                nouvellesActions.classList.add(
+                    "actions"
+                );
+
+
+                const boutonLivrer =
+                    document.createElement(
+                        "button"
+                    );
+
+                boutonLivrer.type =
+                    "button";
+
+                boutonLivrer.classList.add(
+                    "btn-livrer",
+                    "btn-unique"
+                );
+
+                boutonLivrer.innerHTML =
+                    "🟢 Livrer";
+
+
+                boutonLivrer.onclick =
+                    function () {
+
+                        changerStatut(
+                            numeroCommande,
+                            "Livrée",
+                            this
+                        );
+
+                    };
+
+
+                nouvellesActions.appendChild(
+                    boutonLivrer
+                );
+
+
+                corps.appendChild(
+                    nouvellesActions
+                );
+
+            }
+
+        })
+
+        .catch(error => {
+
+            console.error(
+                "❌ Erreur changement statut :",
+                error
+            );
+
+
+            bouton.disabled = false;
+
+            bouton.innerHTML =
+                texteOriginal;
+
+
+            alert(
+                "❌ Impossible de modifier le statut de la commande."
+            );
+
+        });
+
+    }
+
+
+    /* =====================================================
+       SURVEILLANCE DES NOUVELLES COMMANDES
+    ===================================================== */
+
+    let commandesConnues = null;
+
+
+    function verifierNouvellesCommandes() {
+
+        fetch("/api/commandes")
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                const commandes =
+                    data.commandes || [];
+
+
+                const numerosActuels =
+                    commandes
+                        .map(
+                            commande =>
+                                commande.numero
+                        )
+                        .filter(
+                            numero => numero
+                        );
+
+
+                /* Première vérification */
+
+                if (commandesConnues === null) {
+
+                    commandesConnues =
+                        numerosActuels;
+
+                    console.log(
+                        "📋 Commandes initiales :",
+                        commandesConnues
+                    );
+
+                    return;
+
+                }
+
+
+                /* Recherche nouvelle commande */
+
+                const nouvelleCommande =
+                    numerosActuels.some(
+                        numero =>
+                            !commandesConnues.includes(
+                                numero
+                            )
+                    );
+
+
+                if (nouvelleCommande) {
+
+                    console.log(
+                        "🔔 NOUVELLE COMMANDE !"
+                    );
+
+
+                    /* Jouer le son */
+
+                    const son =
+                        document.getElementById(
+                            "sonCommande"
+                        );
+
+
+                    son.currentTime = 0;
+
+
+                    son.play()
+
+                        .then(() => {
+
+                            console.log(
+                                "🔊 SON JOUÉ !"
+                            );
+
+                        })
+
+                        .catch(error => {
+
+                            console.warn(
+                                "⚠️ Lecture audio bloquée :",
+                                error
+                            );
+
+                        });
+
+
+                    commandesConnues =
+                        numerosActuels;
+
+
+                    /*
+                     * Rechargement uniquement
+                     * lorsqu'une NOUVELLE commande
+                     * arrive.
+                     */
+
+                    setTimeout(
+                        () => {
+                            location.reload();
+                        },
+                        1500
+                    );
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.error(
+                    "❌ Erreur API :",
+                    error
+                );
+
+            });
+
+    }
+
+
+    /* Vérification toutes les 3 secondes */
+
+    setInterval(
+        verifierNouvellesCommandes,
+        3000
+    );
+
+
+    /* Première vérification */
+
+    verifierNouvellesCommandes();
+
+</script>
+
+
+</body>
+
+</html>
