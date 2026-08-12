@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Administration - Catalogue</title>
+</head>
+
+<body>
+
+    <h1>??? Gestion du catalogue</h1>
+
+    <h2>? Ajouter un produit</h2>
+
+    <form method="POST" action="/admin/produit/ajouter">
+
+        <p>
+            <label for="nom">Nom du produit</label>
+        </p>
+
+        <input
+            type="text"
+            id="nom"
+            name="nom"
+            placeholder="Ex : Schweppes"
+            required
+        >
+
+        <p>
+            <label for="categorie">Catégorie</label>
+        </p>
+
+        <select id="categorie" name="categorie">
+
+            <option value="Boisson">?? Boisson</option>
+            <option value="Accessoire">?? Accessoire</option>
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+            ? Ajouter
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h2>?? Produits existants</h2>
+
+    {% for produit in produits %}
+
+        <div style="
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+        ">
+
+            <strong>{{ produit.nom }}</strong>
+
+            <br>
+
+            Catégorie : {{ produit.categorie }}
+
+            <br>
+
+            {% if produit.disponible %}
+                ? Disponible
+            {% else %}
+                ? Indisponible
+            {% endif %}
+
+            <form
+                method="POST"
+                action="/admin/produit/{{ produit.id }}/supprimer"
+                style="margin-top: 10px;"
+            >
+
+                <button
+                    type="submit"
+                    onclick="return confirm('Supprimer ce produit ?');"
+                >
+                    ??? Supprimer
+                </button>
+
+            </form>
+
+        </div>
+
+    {% else %}
+
+        <p>Aucun produit dans le catalogue.</p>
+
+    {% endfor %}
+
+</body>
+
+</html>
