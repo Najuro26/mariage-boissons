@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import uuid
+import os
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 
@@ -11,16 +14,67 @@ db = SQLAlchemy(app)
 
 
 # ============================================================
+# CONFIGURATION DES PHOTOS
+# ============================================================
+
+UPLOAD_FOLDER = os.path.join(
+    app.static_folder,
+    "boissons"
+)
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+ALLOWED_EXTENSIONS = {
+    "png",
+    "jpg",
+    "jpeg",
+    "webp",
+    "gif"
+}
+
+
+def fichier_autorise(nom_fichier):
+    return (
+        "." in nom_fichier
+        and nom_fichier.rsplit(".", 1)[1].lower()
+        in ALLOWED_EXTENSIONS
+    )
+
+
+# ============================================================
 # TABLE DES COMMANDES
 # ============================================================
 
 class Commande(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    numero_commande = db.Column(db.String(50), nullable=True)
-    table_numero = db.Column(db.String(20))
-    boisson = db.Column(db.String(100))
-    quantite = db.Column(db.Integer)
-    statut = db.Column(db.String(20), default="Nouvelle")
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    numero_commande = db.Column(
+        db.String(50),
+        nullable=True
+    )
+
+    table_numero = db.Column(
+        db.String(20)
+    )
+
+    boisson = db.Column(
+        db.String(100)
+    )
+
+    quantite = db.Column(
+        db.Integer
+    )
+
+    statut = db.Column(
+        db.String(20),
+        default="Nouvelle"
+    )
 
 
 # ============================================================
@@ -28,20 +82,38 @@ class Commande(db.Model):
 # ============================================================
 
 class Produit(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nom = db.Column(db.String(100), nullable=False, unique=True)
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    nom = db.Column(
+        db.String(100),
+        nullable=False,
+        unique=True
+    )
+
     categorie = db.Column(
         db.String(50),
         nullable=False,
         default="Boisson"
     )
-    photo = db.Column(db.String(200), nullable=True)
-    disponible = db.Column(db.Boolean, default=True)
+
+    photo = db.Column(
+        db.String(200),
+        nullable=True
+    )
+
+    disponible = db.Column(
+        db.Boolean,
+        default=True
+    )
 
 
 # ============================================================
 # ANCIEN CATALOGUE
-# Conservé pour compatibilité avec les anciennes commandes
+# Conservé pour compatibilité
 # ============================================================
 
 BOISSONS = [
@@ -150,10 +222,12 @@ def accueil():
             font-family:Arial;
         ">
 
-            <h2>Commande enregistree avec succes !</h2>
+            <h2>
+                ✅ Commande enregistrée avec succès !
+            </h2>
 
             <p>
-                Votre commande a bien ete envoyee au bar.
+                Votre commande a bien été envoyée au bar.
             </p>
 
             <br>
@@ -198,23 +272,27 @@ def bar():
 
             commandes_groupees[cle] = {
 
-                "numero": commande.numero_commande,
+                "numero":
+                    commande.numero_commande,
 
-                "table": commande.table_numero,
+                "table":
+                    commande.table_numero,
 
-                "statut": (
-                    commande.statut
-                    or "Nouvelle"
-                ),
+                "statut":
+                    commande.statut or "Nouvelle",
 
                 "boissons": []
+
             }
 
         commandes_groupees[cle]["boissons"].append({
 
-            "nom": commande.boisson,
+            "nom":
+                commande.boisson,
 
-            "quantite": commande.quantite
+            "quantite":
+                commande.quantite
+
         })
 
     return render_template(
@@ -250,23 +328,27 @@ def hotesses():
 
             commandes_groupees[cle] = {
 
-                "numero": commande.numero_commande,
+                "numero":
+                    commande.numero_commande,
 
-                "table": commande.table_numero,
+                "table":
+                    commande.table_numero,
 
-                "statut": (
-                    commande.statut
-                    or "Nouvelle"
-                ),
+                "statut":
+                    commande.statut or "Nouvelle",
 
                 "boissons": []
+
             }
 
         commandes_groupees[cle]["boissons"].append({
 
-            "nom": commande.boisson,
+            "nom":
+                commande.boisson,
 
-            "quantite": commande.quantite
+            "quantite":
+                commande.quantite
+
         })
 
     commandes_pretes = [
@@ -302,10 +384,9 @@ def changer_statut(
     statuts_autorises = [
 
         "Nouvelle",
-
         "Préparée",
-
         "Livrée"
+
     ]
 
     if nouveau_statut not in statuts_autorises:
@@ -316,7 +397,8 @@ def changer_statut(
 
                 "success": False,
 
-                "message": "Statut invalide"
+                "message":
+                    "Statut invalide"
 
             }, 400
 
@@ -325,9 +407,7 @@ def changer_statut(
         )
 
     commandes = Commande.query.filter_by(
-
         numero_commande=numero_commande
-
     ).all()
 
     if not commandes:
@@ -338,7 +418,8 @@ def changer_statut(
 
                 "success": False,
 
-                "message": "Commande introuvable"
+                "message":
+                    "Commande introuvable"
 
             }, 404
 
@@ -358,9 +439,11 @@ def changer_statut(
 
             "success": True,
 
-            "numero": numero_commande,
+            "numero":
+                numero_commande,
 
-            "statut": nouveau_statut
+            "statut":
+                nouveau_statut
 
         }
 
@@ -377,9 +460,7 @@ def changer_statut(
 def api_commandes():
 
     commandes = Commande.query.order_by(
-
         Commande.id.desc()
-
     ).all()
 
     commandes_groupees = {}
@@ -398,31 +479,35 @@ def api_commandes():
 
             commandes_groupees[cle] = {
 
-                "numero": commande.numero_commande,
+                "numero":
+                    commande.numero_commande,
 
-                "table": commande.table_numero,
+                "table":
+                    commande.table_numero,
 
-                "statut": (
-                    commande.statut
-                    or "Nouvelle"
-                ),
+                "statut":
+                    commande.statut or "Nouvelle",
 
                 "boissons": []
+
             }
 
         commandes_groupees[cle]["boissons"].append({
 
-            "nom": commande.boisson,
+            "nom":
+                commande.boisson,
 
-            "quantite": commande.quantite
+            "quantite":
+                commande.quantite
+
         })
 
     return {
 
         "commandes":
-        list(
-            commandes_groupees.values()
-        )
+            list(
+                commandes_groupees.values()
+            )
 
     }
 
@@ -452,7 +537,7 @@ def admin():
 
 
 # ============================================================
-# AJOUTER UN PRODUIT
+# AJOUTER UN PRODUIT AVEC PHOTO
 # ============================================================
 
 @app.route(
@@ -461,39 +546,96 @@ def admin():
 )
 def ajouter_produit():
 
-    nom = request.form[
-        "nom"
-    ].strip()
+    nom = request.form.get(
+        "nom",
+        ""
+    ).strip()
 
-    categorie = request.form[
-        "categorie"
-    ]
+    categorie = request.form.get(
+        "categorie",
+        "Boisson"
+    )
 
-    if nom:
+    fichier = request.files.get(
+        "photo"
+    )
 
-        produit_existant = (
-            Produit.query.filter_by(
-                nom=nom
-            ).first()
+    if not nom:
+
+        return redirect(
+            url_for("admin")
         )
 
-        if not produit_existant:
+    produit_existant = Produit.query.filter_by(
+        nom=nom
+    ).first()
 
-            produit = Produit(
+    if produit_existant:
 
-                nom=nom,
+        return redirect(
+            url_for("admin")
+        )
 
-                categorie=categorie,
+    photo = None
 
-                disponible=True
+    # --------------------------------------------------------
+    # ENREGISTREMENT DE LA PHOTO
+    # --------------------------------------------------------
 
+    if fichier and fichier.filename:
+
+        if fichier_autorise(
+            fichier.filename
+        ):
+
+            nom_securise = secure_filename(
+                fichier.filename
             )
 
-            db.session.add(
-                produit
+            extension = nom_securise.rsplit(
+                ".",
+                1
+            )[1].lower()
+
+            nom_unique = (
+                str(uuid.uuid4())
+                + "."
+                + extension
             )
 
-            db.session.commit()
+            chemin = os.path.join(
+                app.config["UPLOAD_FOLDER"],
+                nom_unique
+            )
+
+            fichier.save(chemin)
+
+            photo = (
+                "boissons/"
+                + nom_unique
+            )
+
+    # --------------------------------------------------------
+    # CREATION DU PRODUIT
+    # --------------------------------------------------------
+
+    produit = Produit(
+
+        nom=nom,
+
+        categorie=categorie,
+
+        photo=photo,
+
+        disponible=True
+
+    )
+
+    db.session.add(
+        produit
+    )
+
+    db.session.commit()
 
     return redirect(
         url_for("admin")
@@ -515,6 +657,38 @@ def supprimer_produit(
     produit = Produit.query.get_or_404(
         produit_id
     )
+
+    # --------------------------------------------------------
+    # SUPPRESSION DE LA PHOTO
+    # --------------------------------------------------------
+
+    if produit.photo:
+
+        chemin_photo = os.path.join(
+
+            app.static_folder,
+
+            produit.photo
+
+        )
+
+        if os.path.exists(
+            chemin_photo
+        ):
+
+            try:
+
+                os.remove(
+                    chemin_photo
+                )
+
+            except OSError:
+
+                pass
+
+    # --------------------------------------------------------
+    # SUPPRESSION DU PRODUIT
+    # --------------------------------------------------------
 
     db.session.delete(
         produit
