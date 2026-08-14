@@ -168,6 +168,10 @@ def initialiser_catalogue():
 # PAGE DES INVITES
 # ============================================================
 
+# ============================================================
+# PAGE DES INVITES
+# ============================================================
+
 @app.route("/", methods=["GET", "POST"])
 def accueil():
 
@@ -213,11 +217,11 @@ def accueil():
 
         if commande_creee:
 
-    db.session.commit()
+            db.session.commit()
 
-return redirect(
-    url_for("confirmation")
-)
+            return redirect(
+                url_for("confirmation")
+            )
 
     return render_template(
         "index.html",
