@@ -293,6 +293,207 @@
         }
     }
 
+
+/* =================================================
+   THEME MARIAGE - ESPACE HOTESSES
+================================================= */
+
+:root {
+    --vert-mariage: #176B3A;
+    --vert-fonce: #0F4D2A;
+    --vert-clair: #EAF5EE;
+    --orange-mariage: #F28C28;
+    --orange-clair: #FFF1E2;
+    --fond-mariage: #F7FAF7;
+}
+
+body {
+    background:
+        radial-gradient(circle at top left, rgba(242,140,40,0.08), transparent 30%),
+        linear-gradient(135deg, #F7FAF7, #EEF6F0);
+    color: #26332B;
+}
+
+.header {
+    background: linear-gradient(135deg, var(--vert-fonce), var(--vert-mariage));
+    padding: 22px 15px;
+    border-bottom: 5px solid var(--orange-mariage);
+}
+
+.header h1 {
+    font-size: 30px;
+    font-weight: 800;
+}
+
+.header p {
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.container {
+    max-width: 1000px;
+}
+
+.compteur {
+    border: 2px solid rgba(242,140,40,0.45);
+    background: white;
+    color: var(--vert-fonce);
+    box-shadow: 0 5px 15px rgba(23,107,58,0.10);
+}
+
+.commande {
+    background: white;
+    border: 2px solid rgba(23,107,58,0.12);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(23,107,58,0.10);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.commande:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(23,107,58,0.16);
+}
+
+.commande-header {
+    background: linear-gradient(135deg, var(--vert-mariage), var(--vert-fonce));
+    color: white;
+    padding: 16px 18px;
+}
+
+.numero {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.table-numero {
+    margin-top: 8px;
+    display: inline-block;
+    background: var(--orange-mariage);
+    color: white;
+    padding: 7px 13px;
+    border-radius: 20px;
+    font-weight: 800;
+    font-size: 17px;
+}
+
+.commande-body {
+    padding: 18px;
+}
+
+.titre-boissons {
+    color: var(--vert-fonce);
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.boisson {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    margin-bottom: 7px;
+    border-radius: 10px;
+    background: var(--vert-clair);
+    border-left: 4px solid var(--vert-mariage);
+}
+
+.quantite {
+    min-width: 42px;
+    text-align: center;
+    padding: 4px 8px;
+    border-radius: 10px;
+    background: var(--orange-clair);
+    color: #B65E00;
+    font-weight: 800;
+}
+
+.statut {
+    margin-top: 15px;
+    padding: 11px 13px;
+    border-radius: 10px;
+    background: var(--orange-clair);
+    color: #B65E00;
+    font-weight: 800;
+    text-align: center;
+}
+
+.actions {
+    margin-top: 13px;
+}
+
+.btn-livrer {
+    width: 100%;
+    min-height: 58px;
+    border: none;
+    border-radius: 13px;
+    background: linear-gradient(135deg, var(--vert-mariage), var(--vert-fonce));
+    color: white;
+    font-size: 17px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 5px 14px rgba(23,107,58,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-livrer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(23,107,58,0.30);
+}
+
+.btn-livrer:active {
+    transform: scale(0.98);
+}
+
+@media (max-width: 576px) {
+
+    .header {
+        padding: 18px 12px;
+    }
+
+    .header h1 {
+        font-size: 24px;
+    }
+
+    .container {
+        margin-top: 18px;
+        padding: 0 10px;
+    }
+
+    .compteur {
+        font-size: 15px;
+        padding: 13px;
+    }
+
+    .commandes {
+        grid-template-columns: 1fr;
+        gap: 13px;
+    }
+
+    .commande-header {
+        padding: 14px;
+    }
+
+    .commande-body {
+        padding: 14px;
+    }
+
+    .table-numero {
+        font-size: 16px;
+    }
+
+    .boisson {
+        padding: 10px;
+        font-size: 15px;
+    }
+
+    .btn-livrer {
+        min-height: 62px;
+        font-size: 17px;
+    }
+}
+
 </style>
 
 
