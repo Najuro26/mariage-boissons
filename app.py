@@ -1,3 +1,4 @@
+python
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import uuid
@@ -168,10 +169,6 @@ def initialiser_catalogue():
 # PAGE DES INVITES
 # ============================================================
 
-# ============================================================
-# PAGE DES INVITES
-# ============================================================
-
 @app.route("/", methods=["GET", "POST"])
 def accueil():
 
@@ -256,14 +253,11 @@ def bar():
 
             commandes_groupees[cle] = {
 
-                "numero":
-                    commande.numero_commande,
+                "numero": commande.numero_commande,
 
-                "table":
-                    commande.table_numero,
+                "table": commande.table_numero,
 
-                "statut":
-                    commande.statut or "Nouvelle",
+                "statut": commande.statut or "Nouvelle",
 
                 "boissons": []
 
@@ -271,11 +265,9 @@ def bar():
 
         commandes_groupees[cle]["boissons"].append({
 
-            "nom":
-                commande.boisson,
+            "nom": commande.boisson,
 
-            "quantite":
-                commande.quantite
+            "quantite": commande.quantite
 
         })
 
@@ -312,14 +304,11 @@ def hotesses():
 
             commandes_groupees[cle] = {
 
-                "numero":
-                    commande.numero_commande,
+                "numero": commande.numero_commande,
 
-                "table":
-                    commande.table_numero,
+                "table": commande.table_numero,
 
-                "statut":
-                    commande.statut or "Nouvelle",
+                "statut": commande.statut or "Nouvelle",
 
                 "boissons": []
 
@@ -327,11 +316,9 @@ def hotesses():
 
         commandes_groupees[cle]["boissons"].append({
 
-            "nom":
-                commande.boisson,
+            "nom": commande.boisson,
 
-            "quantite":
-                commande.quantite
+            "quantite": commande.quantite
 
         })
 
@@ -339,8 +326,7 @@ def hotesses():
 
         commande
 
-        for commande
-        in commandes_groupees.values()
+        for commande in commandes_groupees.values()
 
         if commande["statut"] == "Préparée"
 
@@ -366,11 +352,9 @@ def changer_statut(
 ):
 
     statuts_autorises = [
-
         "Nouvelle",
         "Préparée",
         "Livrée"
-
     ]
 
     if nouveau_statut not in statuts_autorises:
@@ -378,12 +362,8 @@ def changer_statut(
         if request.method == "POST":
 
             return {
-
                 "success": False,
-
-                "message":
-                    "Statut invalide"
-
+                "message": "Statut invalide"
             }, 400
 
         return redirect(
@@ -399,12 +379,8 @@ def changer_statut(
         if request.method == "POST":
 
             return {
-
                 "success": False,
-
-                "message":
-                    "Commande introuvable"
-
+                "message": "Commande introuvable"
             }, 404
 
         return redirect(
@@ -420,15 +396,9 @@ def changer_statut(
     if request.method == "POST":
 
         return {
-
             "success": True,
-
-            "numero":
-                numero_commande,
-
-            "statut":
-                nouveau_statut
-
+            "numero": numero_commande,
+            "statut": nouveau_statut
         }
 
     return redirect(
@@ -463,14 +433,11 @@ def api_commandes():
 
             commandes_groupees[cle] = {
 
-                "numero":
-                    commande.numero_commande,
+                "numero": commande.numero_commande,
 
-                "table":
-                    commande.table_numero,
+                "table": commande.table_numero,
 
-                "statut":
-                    commande.statut or "Nouvelle",
+                "statut": commande.statut or "Nouvelle",
 
                 "boissons": []
 
@@ -478,21 +445,16 @@ def api_commandes():
 
         commandes_groupees[cle]["boissons"].append({
 
-            "nom":
-                commande.boisson,
+            "nom": commande.boisson,
 
-            "quantite":
-                commande.quantite
+            "quantite": commande.quantite
 
         })
 
     return {
-
-        "commandes":
-            list(
-                commandes_groupees.values()
-            )
-
+        "commandes": list(
+            commandes_groupees.values()
+        )
     }
 
 
@@ -684,6 +646,7 @@ def supprimer_produit(
         url_for("admin")
     )
 
+
 # ============================================================
 # PAGE DE CONFIRMATION
 # ============================================================
@@ -694,6 +657,8 @@ def confirmation():
     return render_template(
         "confirmation.html"
     )
+
+
 # ============================================================
 # DEMARRAGE
 # ============================================================
@@ -715,3 +680,4 @@ if __name__ == "__main__":
         debug=True
 
     )
+
