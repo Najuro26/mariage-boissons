@@ -1,63 +1,205 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Mariage Louis Godin & Françoise</title>
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+        rel="stylesheet"
+    >
 
     <style>
 
-        body {
-            background: #f8f9fa;
+        :root {
+            --vert-mariage: #176B3A;
+            --vert-fonce: #0F4D2A;
+            --vert-clair: #EAF5EE;
+
+            --orange-mariage: #F28C28;
+            --orange-clair: #FFF1E2;
+
+            --fond: #F8FAF8;
+            --texte: #26332B;
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background:
+                linear-gradient(
+                    180deg,
+                    var(--vert-clair) 0%,
+                    var(--fond) 260px
+                );
+
+            color: var(--texte);
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        /* =====================================================
+           EN-TÊTE
+        ===================================================== */
 
         .header {
             text-align: center;
-            padding: 25px 10px;
+            padding: 30px 10px 25px;
+        }
+
+        .anneaux {
+            font-size: 55px;
+            margin-bottom: 8px;
         }
 
         .header h1 {
-            font-weight: bold;
+            color: var(--vert-fonce);
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 8px;
         }
 
-        .produit-card {
+        .header p {
+            color: #65736A;
+            margin-bottom: 0;
+            font-size: 16px;
+        }
+
+        .ligne-deco {
+            width: 90px;
+            height: 4px;
+            margin: 15px auto 0;
+
+            background: linear-gradient(
+                90deg,
+                var(--vert-mariage),
+                var(--orange-mariage)
+            );
+
+            border-radius: 10px;
+        }
+
+        /* =====================================================
+           CARTE TABLE
+        ===================================================== */
+
+        .table-card {
             background: white;
-            border-radius: 15px;
+            border: 2px solid rgba(23,107,58,0.12);
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 28px;
+
+            box-shadow:
+                0 6px 18px rgba(23,107,58,0.08);
+        }
+
+        .table-label {
+            color: var(--vert-fonce);
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        .form-select {
+            border: 2px solid #DCE8E0;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .form-select:focus {
+            border-color: var(--orange-mariage);
+            box-shadow: 0 0 0 0.2rem rgba(242,140,40,0.15);
+        }
+
+        /* =====================================================
+           CATALOGUE
+        ===================================================== */
+
+        .catalogue-titre {
+            color: var(--vert-fonce);
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .catalogue-description {
+            color: #6B756F;
+            margin-bottom: 25px;
+        }
+
+        .categorie-titre {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            color: var(--vert-fonce);
+            font-weight: 800;
+
+            margin-top: 30px;
+            margin-bottom: 16px;
+
+            padding-bottom: 8px;
+
+            border-bottom: 3px solid var(--orange-mariage);
+        }
+
+        /* =====================================================
+           CARTE PRODUIT
+        ===================================================== */
+
+        .produit-card {
+            height: 100%;
+            background: white;
+
+            border-radius: 18px;
             overflow: hidden;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.10);
-            transition: transform 0.2s;
+
+            border: 1px solid #E1EAE4;
+
+            box-shadow:
+                0 5px 15px rgba(0,0,0,0.07);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
         }
 
         .produit-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 10px 22px rgba(23,107,58,0.14);
         }
 
         .produit-image {
             width: 100%;
-            height: 180px;
+            height: 170px;
+
             object-fit: contain;
-            background: #ffffff;
-            padding: 10px;
+
+            background: white;
+            padding: 12px;
         }
 
         .produit-emoji {
             width: 100%;
-            height: 180px;
+            height: 170px;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
-            background: #ffffff;
+
+            font-size: 58px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--vert-clair),
+                    var(--orange-clair)
+                );
         }
 
         .produit-content {
@@ -65,70 +207,248 @@
         }
 
         .produit-nom {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            color: var(--vert-fonce);
+
+            font-size: 17px;
+            font-weight: 800;
+
+            min-height: 48px;
+
+            display: flex;
+            align-items: center;
         }
 
-        .categorie-titre {
-            margin-top: 25px;
-            margin-bottom: 15px;
+        .quantite-label {
+            display: block;
+
+            color: #68746D;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            margin-bottom: 7px;
+        }
+
+        /* =====================================================
+           BOUTONS + / -
+        ===================================================== */
+
+        .btn-quantite {
+            width: 42px;
+            height: 42px;
+
+            border: none;
+            border-radius: 12px;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            transition: 0.15s;
+        }
+
+        .btn-moins {
+            background: #FDE8E4;
+            color: #B84432;
+        }
+
+        .btn-moins:hover {
+            background: #F7D1C9;
+        }
+
+        .btn-plus {
+            background: var(--vert-clair);
+            color: var(--vert-fonce);
+        }
+
+        .btn-plus:hover {
+            background: #D6EBDD;
         }
 
         .quantite {
-            width: 70px;
+            width: 60px;
+
+            height: 42px;
+
+            border: 2px solid #DCE8E0;
+            border-radius: 12px;
+
+            font-weight: 700;
+            color: var(--vert-fonce);
+        }
+
+        .quantite:focus {
+            border-color: var(--orange-mariage);
+
+            box-shadow:
+                0 0 0 0.2rem rgba(242,140,40,0.15);
+        }
+
+        /* =====================================================
+           BOUTON COMMANDER
+        ===================================================== */
+
+        .commande-container {
+            margin-top: 35px;
+            margin-bottom: 45px;
         }
 
         .btn-commander {
             width: 100%;
-            padding: 15px;
-            font-size: 20px;
-            font-weight: bold;
+
+            padding: 17px;
+
+            font-size: 19px;
+            font-weight: 800;
+
+            border: none;
+            border-radius: 15px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--vert-mariage),
+                    var(--vert-fonce)
+                );
+
+            box-shadow:
+                0 7px 18px rgba(23,107,58,0.25);
+
+            transition: 0.2s;
+        }
+
+        .btn-commander:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 22px rgba(23,107,58,0.30);
+        }
+
+        .btn-commander:active {
+            transform: scale(0.98);
+        }
+
+        /* =====================================================
+           PETIT RAPPEL
+        ===================================================== */
+
+        .rappel {
+            text-align: center;
+
+            background: var(--orange-clair);
+
+            border-left: 5px solid var(--orange-mariage);
+
             border-radius: 12px;
+
+            padding: 12px;
+
+            margin-top: 20px;
+
+            color: #704719;
+
+            font-size: 14px;
+        }
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 576px) {
+
+            .header {
+                padding-top: 22px;
+            }
+
+            .anneaux {
+                font-size: 48px;
+            }
+
+            .header h1 {
+                font-size: 23px;
+            }
+
+            .produit-image,
+            .produit-emoji {
+                height: 135px;
+            }
+
+            .produit-content {
+                padding: 12px;
+            }
+
+            .produit-nom {
+                font-size: 15px;
+                min-height: 45px;
+            }
+
+            .btn-quantite {
+                width: 38px;
+                height: 38px;
+            }
+
+            .quantite {
+                width: 52px;
+                height: 38px;
+            }
+
+            .btn-commander {
+                font-size: 18px;
+            }
         }
 
     </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-    <!-- TITRE -->
+    <!-- =====================================================
+         TITRE
+    ====================================================== -->
 
     <div class="header">
 
-        <div style="font-size:50px;">
+        <div class="anneaux">
             💍
         </div>
 
-        <h2>
-            Mariage Louis Godin & Françoise
-        </h2>
+        <h1>
+            Louis Godin & Françoise
+        </h1>
 
-        <p class="text-muted">
-            🍺 Commande de boissons et accessoires
+        <p>
+            🍹 Commande de boissons et accessoires
         </p>
+
+        <div class="ligne-deco"></div>
 
     </div>
 
 
     <form method="POST">
 
+        <!-- =================================================
+             TABLE
+        ================================================== -->
 
-        <!-- TABLE -->
+        <div class="table-card">
 
-        <div class="card p-3 mb-4">
-
-            <label class="form-label">
-                <strong>🪑 Numéro de table</strong>
-            </label>
+            <div class="table-label">
+                🪑 <strong>Votre numéro de table</strong>
+            </div>
 
             <select
                 name="table"
                 class="form-select"
-                required>
+                required
+            >
 
                 {% for i in range(1,23) %}
 
@@ -143,15 +463,17 @@
         </div>
 
 
-        <!-- CATALOGUE -->
+        <!-- =================================================
+             CATALOGUE
+        ================================================== -->
 
-        <h4 class="mb-2">
+        <h4 class="catalogue-titre">
             🍹 Choisissez vos produits
         </h4>
 
-        <p class="text-muted">
-            Vous pouvez choisir plusieurs produits
-            dans la même commande.
+        <p class="catalogue-description">
+            Sélectionnez les quantités souhaitées.
+            Vous pouvez commander plusieurs produits.
         </p>
 
 
@@ -179,16 +501,15 @@
         </h5>
 
 
-        <div class="row">
+        <div class="row g-3">
 
             {% for produit in produits %}
 
                 {% if produit.categorie == categorie %}
 
-                <div class="col-6 col-md-4 mb-3">
+                <div class="col-6 col-md-4">
 
                     <div class="produit-card">
-
 
                         <!-- IMAGE -->
 
@@ -197,7 +518,8 @@
                         <img
                             src="{{ url_for('static', filename=produit.photo) }}"
                             class="produit-image"
-                            alt="{{ produit.nom }}">
+                            alt="{{ produit.nom }}"
+                        >
 
                         {% else %}
 
@@ -242,25 +564,24 @@
 
                                 {% endif %}
 
-                                {{ produit.nom }}
+                                &nbsp;{{ produit.nom }}
 
                             </div>
 
 
-                            <label>
+                            <label class="quantite-label">
                                 Quantité
                             </label>
 
 
-                            <div class="d-flex align-items-center gap-2">
+                            <div class="d-flex align-items-center justify-content-between gap-1">
 
                                 <button
                                     type="button"
-                                    class="btn btn-outline-danger"
-                                    onclick="diminuer('quantite_{{ produit.id }}')">
-
-                                    ➖
-
+                                    class="btn-quantite btn-moins"
+                                    onclick="diminuer('quantite_{{ produit.id }}')"
+                                >
+                                    −
                                 </button>
 
 
@@ -271,16 +592,16 @@
                                     class="form-control text-center quantite"
                                     min="0"
                                     max="10"
-                                    value="0">
+                                    value="0"
+                                >
 
 
                                 <button
                                     type="button"
-                                    class="btn btn-outline-success"
-                                    onclick="augmenter('quantite_{{ produit.id }}')">
-
-                                    ➕
-
+                                    class="btn-quantite btn-plus"
+                                    onclick="augmenter('quantite_{{ produit.id }}')"
+                                >
+                                    +
                                 </button>
 
                             </div>
@@ -300,20 +621,32 @@
         {% endfor %}
 
 
-        <!-- BOUTON -->
+        <!-- =================================================
+             RAPPEL
+        ================================================== -->
 
-        <div class="d-grid mt-4 mb-5">
+        <div class="rappel">
 
-            <button
-                type="submit"
-                class="btn btn-success btn-lg btn-commander">
-
-                🍺 Envoyer la commande
-
-            </button>
+            💚 Votre commande sera préparée au bar
+            puis livrée directement à votre table.
 
         </div>
 
+
+        <!-- =================================================
+             BOUTON COMMANDER
+        ================================================== -->
+
+        <div class="commande-container">
+
+            <button
+                type="submit"
+                class="btn-commander"
+            >
+                🛎️ Envoyer ma commande
+            </button>
+
+        </div>
 
     </form>
 
@@ -333,7 +666,6 @@ function augmenter(id) {
         champ.value = valeur + 1;
 
     }
-
 }
 
 
@@ -348,12 +680,9 @@ function diminuer(id) {
         champ.value = valeur - 1;
 
     }
-
 }
 
 </script>
 
-
 </body>
-
 </html>
