@@ -213,31 +213,11 @@ def accueil():
 
         if commande_creee:
 
-            db.session.commit()
+    db.session.commit()
 
-        return """
-        <div style="
-            text-align:center;
-            margin-top:50px;
-            font-family:Arial;
-        ">
-
-            <h2>
-                ✅ Commande enregistrée avec succès !
-            </h2>
-
-            <p>
-                Votre commande a bien été envoyée au bar.
-            </p>
-
-            <br>
-
-            <a href="/">
-                Nouvelle commande
-            </a>
-
-        </div>
-        """
+return redirect(
+    url_for("confirmation")
+)
 
     return render_template(
         "index.html",
@@ -700,7 +680,16 @@ def supprimer_produit(
         url_for("admin")
     )
 
+# ============================================================
+# PAGE DE CONFIRMATION
+# ============================================================
 
+@app.route("/confirmation")
+def confirmation():
+
+    return render_template(
+        "confirmation.html"
+    )
 # ============================================================
 # DEMARRAGE
 # ============================================================
