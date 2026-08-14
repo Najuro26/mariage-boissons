@@ -637,6 +637,25 @@
              BOUTON COMMANDER
         ================================================== -->
 
+        <!-- =================================================
+             RESUME DE LA COMMANDE
+        ================================================== -->
+        <div id="resume-commande" class="resume-commande">
+            <div class="resume-titre">
+                📋 Ma commande
+            </div>
+
+            <div id="liste-resume">
+                <div class="resume-vide">
+                    Aucun produit sélectionné
+                </div>
+            </div>
+
+            <div class="resume-total">
+                Total : <strong id="total-resume">0</strong> article(s)
+            </div>
+        </div>
+
         <div class="commande-container">
 
             <button
@@ -654,34 +673,88 @@
 
 
 <script>
+function mettreAJourResume() {
+    const liste = document.getElementById("liste-resume");
+    const totalElement = document.getElementById("total-resume");
+
+    if (!liste || !totalElement) {
+        return;
+    }
+
+    let total = 0;
+    let produitsSelectionnes = [];
+
+    document.querySelectorAll('input[name^="quantite_"]').forEach(function(champ) {
+        const quantite = parseInt(champ.value) || 0;
+
+        if (quantite > 0) {
+            const carte = champ.closest(".produit-card");
+
+            if (carte) {
+                const nomElement = carte.querySelector(".produit-nom");
+
+                if (nomElement) {
+                    const nom = nomElement.textContent.trim();
+
+                    produitsSelectionnes.push({
+                        nom: nom,
+                        quantite: quantite
+                    });
+
+                    total += quantite;
+                }
+            }
+        }
+    });
+
+    if (produitsSelectionnes.length === 0) {
+        liste.innerHTML = `
+            <div class="resume-vide">
+                Aucun produit sélectionné
+            </div>
+        `;
+    } else {
+        liste.innerHTML = produitsSelectionnes.map(function(produit) {
+            return `
+                <div class="resume-ligne">
+                    <span>${produit.nom}</span>
+                    <strong>x${produit.quantite}</strong>
+                </div>
+            `;
+        }).join("");
+    }
+
+    totalElement.textContent = total;
+}
 
 function augmenter(id) {
-
     let champ = document.getElementById(id);
-
     let valeur = parseInt(champ.value) || 0;
 
     if (valeur < 10) {
-
         champ.value = valeur + 1;
-
+        mettreAJourResume();
     }
 }
 
-
 function diminuer(id) {
-
     let champ = document.getElementById(id);
-
     let valeur = parseInt(champ.value) || 0;
 
     if (valeur > 0) {
-
         champ.value = valeur - 1;
-
+        mettreAJourResume();
     }
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('input[name^="quantite_"]').forEach(function(champ) {
+        champ.addEventListener("input", mettreAJourResume);
+        champ.addEventListener("change", mettreAJourResume);
+    });
+
+    mettreAJourResume();
+});
 </script>
 
 </body>
