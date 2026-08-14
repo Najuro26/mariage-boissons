@@ -402,7 +402,176 @@
             }
         }
 
-    </style>
+
+/* =================================================
+   OPTIMISATION MOBILE - MARIAGE
+================================================= */
+
+@media (max-width: 576px) {
+
+    body {
+        font-size: 15px;
+        padding-bottom: 20px;
+    }
+
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .header {
+        padding: 18px 5px 12px;
+    }
+
+    .header > div:first-child {
+        font-size: 42px !important;
+    }
+
+    .header h1,
+    .header h2 {
+        font-size: 24px;
+        line-height: 1.2;
+    }
+
+    .header p {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+
+    .categorie-titre {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+    .produit-card {
+        margin-bottom: 12px;
+        border-radius: 14px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    .produit-image,
+    .produit-emoji {
+        height: 125px;
+    }
+
+    .produit-image {
+        padding: 8px;
+    }
+
+    .produit-emoji {
+        font-size: 45px;
+    }
+
+    .produit-content {
+        padding: 11px;
+    }
+
+    .produit-nom {
+        font-size: 15px;
+        line-height: 1.2;
+        min-height: 38px;
+        display: flex;
+        align-items: center;
+    }
+
+    .quantite-label {
+        font-size: 13px;
+        margin-bottom: 5px;
+    }
+
+    .btn-quantite {
+        width: 42px !important;
+        height: 42px !important;
+        min-width: 42px !important;
+        padding: 0 !important;
+        font-size: 22px !important;
+        border-radius: 10px !important;
+    }
+
+    .quantite {
+        height: 42px !important;
+        font-size: 18px !important;
+        font-weight: bold;
+        padding: 4px !important;
+    }
+
+    .resume-commande {
+        margin-top: 18px;
+        margin-bottom: 14px;
+        padding: 15px;
+        border-radius: 16px;
+        border: 2px solid var(--orange-mariage);
+        background: #FFF9F2;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .resume-titre {
+        font-size: 19px;
+        font-weight: 800;
+        color: var(--vert-mariage);
+        margin-bottom: 10px;
+    }
+
+    .resume-ligne {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(23,107,58,0.12);
+    }
+
+    .resume-ligne:last-child {
+        border-bottom: none;
+    }
+
+    .resume-total {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 2px solid var(--orange-mariage);
+        text-align: right;
+        font-size: 16px;
+        color: var(--vert-fonce);
+    }
+
+    .resume-vide {
+        color: #777;
+        font-size: 14px;
+        text-align: center;
+        padding: 5px 0;
+    }
+
+    .commande-container {
+        margin-top: 10px;
+        padding-bottom: 20px;
+    }
+
+    .btn-commander {
+        width: 100%;
+        min-height: 58px;
+        font-size: 18px !important;
+        border-radius: 14px !important;
+        box-shadow: 0 5px 14px rgba(23,107,58,0.25);
+    }
+}
+
+@media (min-width: 577px) {
+
+    .resume-commande {
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .resume-ligne {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+    }
+}
+
+</style>
 </head>
 
 <body>
