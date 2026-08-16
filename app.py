@@ -658,6 +658,20 @@ def confirmation():
     )
 
 
+
+
+# ============================================================
+# REINITIALISER LES COMMANDES
+# ============================================================
+
+@app.route("/commandes/reset", methods=["POST"])
+def reset_commandes():
+
+    Commande.query.delete()
+    db.session.commit()
+
+    return redirect(url_for("bar"))
+
 # ============================================================
 # DEMARRAGE
 # ============================================================
